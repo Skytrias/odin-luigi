@@ -953,6 +953,9 @@ button_message :: proc(e: ^Element, kind: Message, data: int, payload: rawptr) -
 			)
 		} else {
 			draw_rectangle((^Painter)(payload), e.bounds, color, ui.theme.border)
+			if .Checked in button.button_flags {
+				draw_block((^Painter)(payload), rect_inset(e.bounds, 4), ui.theme.button_pressed)
+			}
 			draw_string((^Painter)(payload), e.bounds, button.label, text_color, .Center)
 		}
 	case .Update:

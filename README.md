@@ -5,6 +5,8 @@
 - [luigi_rmgui/luigi.odin](luigi_rmgui/luigi.odin) is an almost one to one port of `luigi.h` in retained mode. SDL3 replaces the platform hosts.
 - [luigi_imgui/luigi.odin](luigi_imgui/luigi.odin) keeps the same elements, messages, painter, and layout, and only changes the core so the application declares its UI every frame. It shows that Luigi's way of building UI out of elements does not depend on retained mode.
 
+![The basics example: buttons, a checkbox, a gauge, a slider, and a textbox beside a code view and a table.](assets/basics_main.png)
+
 ## AI authorship
 
 This is an AI-authored project. Its maintainer directed the work but did not write the implementation code by hand; both ports took about an hour.
@@ -15,9 +17,12 @@ This is an AI-authored project. Its maintainer directed the work but did not wri
 luigi_rmgui/luigi.odin            retained mode library
 luigi_rmgui/examples/minimal.odin the README walkthrough
 luigi_rmgui/examples/basics.odin  Luigi's example program
+luigi_rmgui/examples/todo.odin    Luigi's to-do list example
 luigi_imgui/luigi.odin            immediate mode library
 luigi_imgui/examples/minimal.odin the README walkthrough, declared every frame
 luigi_imgui/examples/basics.odin  Luigi's example program, declared every frame
+luigi_imgui/examples/todo.odin    Luigi's to-do list example, declared every frame
+assets/                           screenshots for this README
 ```
 
 Each library is a single file in its own package directory, and each example is a single file that imports its library as `..`. That keeps the repository small, but it is not how you would use Odin's package system in a project. There you would copy the library in as a subpackage, for example `src/luigi/luigi.odin` with `src/main.odin` doing `import "luigi"`, and change it as you see fit.
@@ -29,11 +34,25 @@ You need a current Odin compiler and SDL3 available to Odin's `vendor:SDL3` pack
 ```sh
 odin run luigi_rmgui/examples/minimal.odin -file
 odin run luigi_rmgui/examples/basics.odin -file
+odin run luigi_rmgui/examples/todo.odin -file
 odin run luigi_imgui/examples/minimal.odin -file
 odin run luigi_imgui/examples/basics.odin -file
+odin run luigi_imgui/examples/todo.odin -file
 ```
 
-`basics` opens the main Luigi view, a theme editor, and an MDI window; its code view shows the library's own source. The renderer is plain software rendering, so add `-o:speed` for an optimized build.
+The renderer is plain software rendering, so add `-o:speed` for an optimized build. The screenshots below come from the immediate mode examples; the retained ones look the same.
+
+`minimal` is the walkthrough from the documentation below.
+
+![The minimal example: a button, a color picker, a gauge, a slider, a label, and a textbox.](assets/minimal.png)
+
+`basics` recreates Luigi's `luigi_example.c`: the main view above, a theme editor, and an MDI window. Its code view shows the library's own source.
+
+![The theme editor: a color picker beside a table of theme colors.](assets/basics_theme.png) ![Two overlapping MDI child windows.](assets/basics_mdi.png)
+
+`todo` recreates Luigi's `todo_list_example.cpp`: type a task and press Enter, check it off, edit it, and filter by tab. The retained version destroys and rebuilds item rows as the list changes. The immediate mode version loops over the items every frame.
+
+![The to-do example with three tasks, one checked, under the All tab.](assets/todo.png)
 
 ## By the numbers
 
@@ -45,12 +64,12 @@ Code lines without blank lines and comments, counted against upstream `luigi.h` 
 | X11, Win32, and Essence hosts | 1,123 |
 | FreeType, debug inspector, and SSE2 paths (not ported) | 216 |
 | `luigi.h`, portable core | 3,526 |
-| `luigi_rmgui/luigi.odin`, including its SDL3 host | 2,870 |
-| `luigi_imgui/luigi.odin`, including its SDL3 host | 2,833 |
+| `luigi_rmgui/luigi.odin`, including its SDL3 host | 2,873 |
+| `luigi_imgui/luigi.odin`, including its SDL3 host | 2,836 |
 
 About three quarters of the lines in the immediate mode library are identical to the retained one and in the same order. The painter, font, panel layout, scroll bar geometry, and most message handlers are shared word for word.
 
-The `basics` examples recreate `luigi_example.c` (171 lines) in about 200 lines each. The Odin numbers come from `odinfmt` output, which puts every enum value and struct field on its own line.
+The `basics` examples recreate `luigi_example.c` (171 lines) in about 200 lines each. Luigi's to-do list (116 lines of C++) takes 131 lines in retained mode and 76 in immediate mode. The Odin numbers come from `odinfmt` output, which puts every enum value and struct field on its own line.
 
 ## Notes from using Luigi-style UIs
 
