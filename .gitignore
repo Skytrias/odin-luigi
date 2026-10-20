@@ -1,0 +1,21 @@
+# Odin build output
+/build/
+/bin/
+/*.bin
+/*.exe
+/*.o
+/*.obj
+/*.dSYM/
+
+# Local editor and OS files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Local development files
+AGENTS.md
+odinfmt.json
+/tests/
+/tests_imgui/
